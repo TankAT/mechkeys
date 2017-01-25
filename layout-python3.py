@@ -729,7 +729,7 @@ LibName3=device
 """
 
 component_templates = {
-    "switch": u"""$Comp
+    "switch": """$Comp
 L MX_LED %(ref)s
 U %(pkg)d 1 %(timestamp)x
 P %(x)d %(y)d
@@ -740,7 +740,7 @@ F 3 "" H %(x)d %(y)d 60  0000 C CNN
     %(pkg)d    %(x)d %(y)d
     1    0    0    -1
 $EndComp""",
-    "led": u"""$Comp
+    "led": """$Comp
 L MX_LED %(ref)s
 U %(pkg)d 1 %(timestamp)x
 P %(x)d %(y)d
@@ -751,7 +751,7 @@ F 3 "" H %(x)d %(y)d 60  0000 C CNN
     %(pkg)d    %(x)d %(y)d
     0    1    1    0
 $EndComp""",
-    "diode": u"""$Comp
+    "diode": """$Comp
 L D D%(ref)s
 U %(pkg)d 1 %(timestamp)x
 P %(x)d %(y)d
@@ -773,7 +773,7 @@ def add_to_schematic(schem, x, y, timestamp=None, reference=None):
         "y": int((y * sw_spacing + sw_y_origin) / 100) * 100,
         "ref_y": y * sw_spacing + sw_y_origin - 100,
         "pkg": 1,
-        "ref": unicode(reference),
+        "ref": str(reference),
         "timestamp": time() if timestamp is None else timestamp
     })
     schem.write(component_templates["led"] % {
@@ -781,7 +781,7 @@ def add_to_schematic(schem, x, y, timestamp=None, reference=None):
         "y": int((y * led_spacing + led_y_origin) / 100) * 100,
         "ref_y": y * led_spacing + led_y_origin - 150,
         "pkg": 2,
-        "ref": unicode(reference),
+        "ref": str(reference),
         "timestamp": time() if timestamp is None else timestamp + 1
     })
     schem.write(component_templates["diode"] % {
@@ -790,7 +790,7 @@ def add_to_schematic(schem, x, y, timestamp=None, reference=None):
         "ref_x": int((x * sw_spacing + sw_x_origin) / 100) * 100 + 400,
         "ref_y": int((y * sw_spacing + sw_y_origin) / 100) * 100 + 250,
         "pkg": 1,
-        "ref": unicode(reference.replace("SW_", "D")),
+        "ref": str(reference.replace("SW_", "D")),
         "timestamp": time() if timestamp is None else timestamp
     })
 
@@ -799,27 +799,27 @@ def place_text_footprint(pcb_text, x, y, reference=None, i=None, timestamp=None)
     if reference is None:
         reference = "SW%d_%d" % (x, y)
     pcb_text.write(footprints[footprint_name].format(
-        reference=unicode(reference),
+        reference=str(reference),
         x_pos=x * pcb_spacing,
         y_pos=y * pcb_spacing,
         rotate=switch_rotate,
-        tstamp=unicode(time() if timestamp is None else timestamp),
-        tedit=unicode(time() if timestamp is None else timestamp)
+        tstamp=str(time() if timestamp is None else timestamp),
+        tedit=str(time() if timestamp is None else timestamp)
     ))
     if i is not None:
         reference = "D%d" % (i)
     if reference is None:
         reference = "D%d_%d" % (x, y)
     pcb_text.write(footprints[diode_template].format(
-        reference=unicode(reference),
+        reference=str(reference),
         x_pos=x * pcb_spacing + diode_x_offset,
         y_pos=y * pcb_spacing + diode_y_offset,
         rotate=diode_rotate,
         label_x_pos=diode_label_x_offset,
         label_y_pos=diode_label_y_offset,
         label_rotate=diode_label_rotate,
-        tstamp=unicode(time() if timestamp is None else timestamp),
-        tedit=unicode(time() if timestamp is None else timestamp)
+        tstamp=str(time() if timestamp is None else timestamp),
+        tedit=str(time() if timestamp is None else timestamp)
     ))
 
 
@@ -827,8 +827,8 @@ def main():
     if not os.path.exists(output_directory):
         os.mkdir(output_directory)
     if os.path.exists(project_file_name):
-        print "Project exists, destroy it (y/n)?"
-        if raw_input().lower() == "y":
+        print("Project exists, destroy it (y/n)?")
+        if input().lower() == "y":
             with open(project_file_name, mode="w") as project_file:
                 project_file.write(project_template)
     else:
@@ -836,14 +836,14 @@ def main():
             project_file.write(project_template)
     sch_name = schematic_file_name
     if os.path.exists(sch_name):
-        print "Schematic exists, destroy it (y/n)?"
-        if raw_input().lower() == "n":
+        print("Schematic exists, destroy it (y/n)?")
+        if input().lower() == "n":
             sch_name = os.devnull
     switch_sch = codecs.open(sch_name, mode="w", encoding='utf-8')
     pcb_name = pcb_file_name
     if os.path.exists(pcb_name):
-        print "PCB exists, destroy it (y/n)?"
-        if raw_input().lower() == "n":
+        print("PCB exists, destroy it (y/n)?")
+        if input().lower() == "n":
             pcb_name = os.devnull
     pcb_txt = codecs.open(pcb_name, mode="w", encoding='utf-8')
     with open(layout_file_name) as layout_file:
@@ -868,7 +868,7 @@ def main():
             elif isinstance(col, six.string_types):
                 ref = "SW_X%dY%d" % (x, y)
                 if col.split() and col.split()[0].isalnum():
-                    ref = u"SW_" + col.split()[0]
+                    ref = "SW_" + col.split()[0]
                 ref += "_%d" % i
                 ref = "SW_%d" % i  # just want them numbered by order
                 x_offset = (width - 1.0) / 2
