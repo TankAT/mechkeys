@@ -2486,9 +2486,7 @@ Connection ~ 16500 1900
 Connection ~ 17700 1900
 Connection ~ 18700 1900
 Wire Wire Line
-	1300 3400 15500 3400
-Wire Wire Line
-	17700 3400 19700 3400
+	1300 3400 19700 3400
 Connection ~ 3500 3400
 Connection ~ 4500 3400
 Connection ~ 5500 3400
@@ -2723,4 +2721,8 @@ Connection ~ 1700 1600
 Text GLabel 18900 1200 1    60   Input ~ 0
 C17
 Connection ~ 2700 3100
+Connection ~ 6500 3400
+Connection ~ 7500 3400
+Connection ~ 7000 4400
+Connection ~ 16300 7400
 $EndSCHEMATC
